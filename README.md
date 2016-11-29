@@ -49,7 +49,7 @@ Get a named copy of the running image like this:
 ```
 docker ps   # find the container name for the running DB
 docker stop fun_goat
-docker commit fun_goat unifield/postgres:8.4_db
+docker commit fun_goat unifield/postgres:8.4_3.0rc2
 docker rm fun_goat
 ```
 
@@ -58,10 +58,15 @@ Test it by starting it:
 ```
 docker run -p 127.0.0.1:15432:5432 \
       -e POSTGRESQL_USER=unifield -e POSTGRESQL_TRUST=YES \
-      -e POSTGRESQL_DATA=/internal unifield/postgres:8.4_db
+      -e POSTGRESQL_DATA=/internal unifield/postgres:8.4_3.0rc2
 ```
 
 The databases you loaded should still be there. Drop one with pct_drop.
-Stop and re-start the unifield/postgres:8.4_db container. The missing
+Stop and re-start the unifield/postgres:8.4_3.0rc2 container. The missing
 database will be brought back to life, and any updates/inserts into the
 databases will be reverted.
+
+When using docker-compose, stop and start does not revert the database.
+It only stops and starts an existing container made from the image. To make
+new containers from the base image with a clean database, use
+docker-compose down/up.
