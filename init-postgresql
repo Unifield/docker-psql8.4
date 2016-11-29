@@ -12,9 +12,10 @@ POSTGRESQL_TRUST=${POSTGRESQL_TRUST:-"NO"}
 
 POSTGRESQL_BIN=/usr/lib/postgresql/8.4/bin/postgres
 POSTGRESQL_CONFIG_FILE=/etc/postgresql/8.4/main/postgresql.conf
-POSTGRESQL_DATA=/var/lib/postgresql/8.4/main
+POSTGRESQL_DATA=${POSTGRESQL_DATA:-"/var/lib/postgresql/8.4/main"}
+cfg="--config-file=$POSTGRESQL_CONFIG_FILE -c data_directory=$POSTGRESQL_DATA"
 
-POSTGRESQL_SINGLE="sudo -u postgres $POSTGRESQL_BIN --single --config-file=$POSTGRESQL_CONFIG_FILE"
+POSTGRESQL_SINGLE="sudo -u postgres $POSTGRESQL_BIN --single $cfg"
 
 if [ ! -d $POSTGRESQL_DATA ]; then
     mkdir -p $POSTGRESQL_DATA
@@ -28,6 +29,7 @@ if [ "$POSTGRESQL_TRUST" = "YES" ]; then
 	sed -i 's/md5/trust/' /etc/postgresql/8.4/main/pg_hba.conf
 fi
 
+echo "CREATE USER $POSTGRESQL_USER WITH SUPERUSER;"
 $POSTGRESQL_SINGLE <<< "CREATE USER $POSTGRESQL_USER WITH SUPERUSER;" > /dev/null
 $POSTGRESQL_SINGLE <<< "ALTER USER $POSTGRESQL_USER WITH PASSWORD '$POSTGRESQL_PASS';" > /dev/null
 
@@ -35,4 +37,4 @@ if [ -n "$POSTGRESQL_DB" ]; then
 	$POSTGRESQL_SINGLE <<< "CREATE DATABASE $POSTGRESQL_DB OWNER $POSTGRESQL_USER TEMPLATE $POSTGRESQL_TEMPLATE;" > /dev/null
 fi
 
-exec sudo -u postgres $POSTGRESQL_BIN --config-file=$POSTGRESQL_CONFIG_FILE
+exec sudo -u postgres $POSTGRESQL_BIN $cfg
