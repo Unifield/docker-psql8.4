@@ -36,7 +36,8 @@ Bring up the database in internal data mode, listening on port 15432:
 ```
 docker run -p 127.0.0.1:15432:5432 \
       -e POSTGRESQL_USER=unifield -e POSTGRESQL_TRUST=YES \
-      -e POSTGRESQL_DATA=/internal unifield/postgres:8.4
+      -e POSTGRESQL_DATA=/internal -e FAKETIME="2016-05-25 00:00:00" \
+      --name fz unifield/postgres:8.4
 ```
 
 Modify .automafield.config.sh to have MY_POSTGRES_USERNAME=unifield
@@ -47,10 +48,10 @@ pct_restoreall, etc.
 Get a named copy of the running image like this:
 
 ```
-docker ps   # find the container name for the running DB
-docker stop fun_goat
-docker commit fun_goat unifield/postgres:8.4_3.0rc2
-docker rm fun_goat
+ver=3.0rc2
+docker stop fz
+docker commit fz unifield/postgres:8.4_$ver
+docker rm fz
 ```
 
 Test it by starting it:
@@ -58,7 +59,8 @@ Test it by starting it:
 ```
 docker run -p 127.0.0.1:15432:5432 \
       -e POSTGRESQL_USER=unifield -e POSTGRESQL_TRUST=YES \
-      -e POSTGRESQL_DATA=/internal unifield/postgres:8.4_3.0rc2
+      -e POSTGRESQL_DATA=/internal -e FAKETIME="2016-05-25 00:00:00" \
+      -e unifield/postgres:8.4_$ver
 ```
 
 The databases you loaded should still be there. Drop one with pct_drop.
