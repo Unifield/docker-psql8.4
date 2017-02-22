@@ -12,8 +12,8 @@ ENV LANGUAGE en_US.UTF-8
 ENV LANG en_US:en
 ENV LC_ALL en_US.UTF-8
 
-RUN sudo echo "Europe/Paris" > /etc/timezone
-RUN sudo dpkg-reconfigure -f noninteractive tzdata
+RUN echo "Europe/Paris" > /etc/timezone
+RUN dpkg-reconfigure -f noninteractive tzdata
 
 RUN echo "deb http://old-releases.ubuntu.com/ubuntu lucid main restricted" > /etc/apt/sources.list; \
  echo "deb http://old-releases.ubuntu.com/ubuntu/ lucid-updates main restricted" >> /etc/apt/sources.list; \
