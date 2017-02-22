@@ -36,7 +36,7 @@ Bring up the database in internal data mode, listening on port 15432:
 ```
 docker run -p 127.0.0.1:15432:5432 \
       -e POSTGRESQL_USER=unifield -e POSTGRESQL_TRUST=YES \
-      -e POSTGRESQL_DATA=/internal -e FAKETIME="2016-05-25 00:00:00" \
+      -e POSTGRESQL_DATA=/internal \
       --name fz unifield/postgres:8.4
 ```
 
@@ -59,7 +59,7 @@ Test it by starting it:
 ```
 docker run -p 127.0.0.1:15432:5432 \
       -e POSTGRESQL_USER=unifield -e POSTGRESQL_TRUST=YES \
-      -e POSTGRESQL_DATA=/internal -e FAKETIME="2016-05-25 00:00:00" \
+      -e POSTGRESQL_DATA=/internal \
       -e unifield/postgres:8.4_$ver
 ```
 
